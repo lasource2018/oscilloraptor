@@ -1,3 +1,142 @@
+import math
+import wave, struct
+from struct import *
+from time import sleep
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+
+def lecture_Son(nomFichier) :
+    
+    data = []
+    f = wave.open(nomFichier, 'rb')
+
+    nbreCanaux = f.getnchannels()
+    nbreEchant = f.getnframes()
+    tailleEchant = f.getsampwidth()
+    fech = f.getframerate()
+    """
+    print("Nombre de canaux :", nbreCanaux)
+    print("Féquence d'échantillonnage :", fech)
+    print("Taille de chaque échantillon :", tailleEchant, "octets")
+    print("Nombre d'échantillons :", nbreEchant)
+
+    print("Lecture du fichier...")
+    """
+    if tailleEchant == 2 :
+        for i in range(nbreEchant) :
+            b = f.readframes(1)
+            val = struct.unpack('h', b)
+            data.append(val[0])
+    elif tailleEchant == 1 :
+        for i in range(nbreEchant) :
+            b = f.readframes(1)
+            val = struct.unpack('b', b)
+            data.append(val[0])
+    else :
+        print("Format de fichier non reconnu")
+        
+    
+    return data,nbCanaux,nbreEchant,fech
+
+
+def Ecriture_Son(nomFichier, listeEch) :
+
+    fech = 44100    #par défault pour le moment, mais peut être choisit par l'utilisateur
+    nbreOctets = 2
+    nbreCanaux = 1
+    
+    nbreEchant = len(listeEch)
+    parametres = (nbreCanaux, nbreOctets,fech, nbreEchant, 'NONE', 'notcompressed')
+    
+    print("Enregistrement du fichier...")
+    
+    Liste = []
+    for i in range(nbreEchant) :
+        b = struct.pack('h',listeEch[i])
+        Liste.append(b[0])
+        Liste.append(b[1])
+    
+    data = bytes(Liste)
+    
+    f = wave.open(nomFichier, 'wb')
+    f.setparams(parametres)
+    f.writeframes(data)
+    f.close()
+
+
+oc = { "Do": 131, "Do#": 139, "Re": 147, "Re#": 156, "Mi": 165, "Fa": 175, "Fa#": 185, "Sol": 196, "Sol#": 208, "La": 220, "Sib" :233, "Si" : 247 }
+
+oc2 = { "Do": 262, "Do#": 277, "Re": 294, "Re#": 311, "Mi": 330, "Fa": 349, "Fa#": 370, "Sol": 392, "Sol#": 415, "La": 440, "Sib" :466, "Si" : 494, "Do2" : 523 }
+
+DoM = [oc["Do"],oc["Re"],oc["Mi"],oc["Fa"],oc["Sol"],oc["La"],oc["Si"],oc2["Do"] ] 
+
+#Gammes avec #
+SolM = [oc["Sol"],oc["La"],oc["Si"],oc2["Do"],oc2["Re"],oc2["Mi"],oc2["Fa#"],oc2["Sol"]]
+ReM = [oc["Re"],oc["Mi"],oc["Fa#"],oc["Sol"],oc["La"],oc["Si"],oc2["Do#"],oc2["Re"]]
+LaM = [oc["La"],oc["Si"],oc2["Do#"],oc2["Re"],oc2["Mi"],oc2["Fa#"],oc2["Sol#"],oc2["La"]] 
+MiM = [oc["Mi"],oc["Fa#"],oc["Sol#"],oc["La"],oc["Si"],oc2["Do#"],oc2["Re#"],oc2["Mi"]] 
+SiM = [oc["Si"],oc2["Do#"],oc2["Re#"],oc2["Mi"],oc2["Fa#"],oc2["Sol#"],oc2["Sib"],oc2["Si"]] 
+Fa_M = [oc["Fa#"],oc["Sol#"],oc["Sib"],oc["Si"],oc2["Do#"],oc2["Re#"],oc2["Fa"],oc2["Fa#"]] 
+Do_M = [oc["Do#"],oc["Re#"],oc["Fa"],oc["Fa#"],oc["Sol#"],oc["Sib"],oc["Do"],oc2["Do#"]]
+
+#Gammes avec bémol
+# A faire
+
+
+def ecrire_gamme(nom_fichier,gamme,amplitude,tps_note):
+    E = []
+    n = gamme
+    for i in range(len(n)):
+        O = [int(round(amplitude*math.sin(2*math.pi*n[i]*t*(1/44100)))) for t in  range(44100*tps_note)]
+        E.extend(O)
+    Ecriture_Son(nom_fichier, E)
+    
+ecrire_gamme("gamme_SolM.wav",SolM,5000,1)
+
+
+def func(x,a,b,c):
+    return c * np.exp( -np.power( (x-a)/b, 2) )
+ 
+plt.ion()   # utilise pyplot en interactif
+ 
+# Ouverture du fichier wav a decrypter
+f,x, nbCanaux, nbFrames, fech = lecture_Son("gamme.wav")
+
+#Decouper le fichier pour analyser chaque note après l'autre 
+frequences, freq_gauss = [], []
+larg_frame = 44100
+for posi in range(0,nbFrames,larg_frame):
+ 
+    # Sequence contenant une note
+    f.setpos(posi)
+    donnee = f.readframes(larg_frame)
+    data = struct.unpack('%sh' % (larg_frame*nbCanaux ), donnee)
+
+    # Transformee de Fourier
+    w     = np.fft.fft(data)
+    sig   = np.real(w * w.conjugate())
+    freqs = np.fft.fftfreq(len(w)) * nbFrames
+ 
+    # Estimation de la frequence
+    idx = np.argmax(sig)
+    f0, maxi = np.abs(freqs[idx]), sig[idx]
+    frequences.append( f0 )
+    
+    #Ajustement par une gaussienne
+    ind = np.where( np.abs(freqs - f0) < 20 )
+    popt, pcov = curve_fit( func, freqs[ind], sig[ind]/maxi, p0=[f0,1,1] )
+    a, b, c = popt
+    freq_gauss.append(a)
+    
+
+f.close()
+  
+for res in (frequences,freq_gauss):
+    print(np.round(res, 0))
+
+
+
 from music21 import *
 
 #entrés (ps : la varibale Dièse affiche la sorti sous forme d'un dièse ou d'un bémole)
