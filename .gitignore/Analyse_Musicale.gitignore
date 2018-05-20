@@ -5,6 +5,7 @@ from time import sleep
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+from music21 import *
 
 def lecture_Son(nomFichier) :
     
@@ -134,32 +135,33 @@ f.close()
   
 for res in (frequences,freq_gauss):
     print(np.round(res, 0))
-
-
-
-from music21 import *
-
-#entrés (ps : la varibale Dièse affiche la sorti sous forme d'un dièse ou d'un bémole)
-#C majeur
+#Analyse des Fréquences fournit soit par le générateur ou l'analyseur 
+"""    
 A = [261.63, 293.66, 329.63, 349.23, 392.00,440.00, 493.88]
 #F
 B = [349.23, 392.00, 440.00, 493.88,523.25, 587.33,659.26]
 #A aéolien
 L = [3520.00, 3951.07,4186.01,4698.64,5274.04, 5587.65,6271.93]
 Diese = 1
+"""
 
-#variable et Tableau 
+#variable et Tableau
+
 ListeNote = []
+#La liste va contenir le nom des notes sous la notation anglaise "A,B,C,D,E,F,G"
 ListeOctaveNote = []
+#contient la hauteur de la note par rapport à un chiffre allant de 0 à 7
 ListeFrequenceJuste = []
+#contient les fréquences accordées, afin de réduire les erreures de calcules 
 ListeNoteMusic21 = []
 TailleListePrincipale = len(L)
 
 
-
+#création des listes de notes 
 for loop in range(TailleListePrincipale):
     a = L[loop]
     n = 0
+    # pour reconnaitre les notes, on les transpose à l'octave 3. Cela permet une meilleur optimisation
     while a < 255 or a > 500 :
         if a < 255:
             a = a * 2
@@ -171,9 +173,11 @@ for loop in range(TailleListePrincipale):
     ListeOctaveNote.append(n)
     if a < 263 and a > 259:
         ListeNote.append("C")
+        #calcule de la valeur exacte de la fréquence de la note 
         a = 261.63 * 2 **(n-3)
         ListeFrequenceJuste.append(a)
     elif a < 279 and a > 275 :
+        # pour changer l'affichage de la sortie 
         if Diese == 1:
             ListeNote.append("C#")
             a = 277.18 * 2 ** (n-3)
@@ -243,14 +247,18 @@ for loop in range(TailleListePrincipale):
         ListeNote.append("B")
         a = 493.88 * 2 ** (n-3)
         ListeFrequenceJuste.append(a)
+"""
 print(ListeNote)
 print(ListeOctaveNote)
+"""
 
-#reconnaissance de gamme
+#fonction pour reconnaitre un intervalle, ou pour donner la position dans la liste
 def ton(L):
     TailleListe = len(L)
     for loop in range(TailleListe):
-        quotient = L[Loop]
+        #calcule du rapport des frequence entre la note tonales et les autre notes
+        quotient = L[Loop]/L[0]
+        #rapport s'approche de 
         if quotien < 1.16 and > 1.10
             return True
             break
@@ -352,6 +360,7 @@ elif TailleListePrincipale >= 7:
         else:
             print(ListeNote[0], end = " ")
             print("Locrien")
+
 #Détections d'accords            
 elif TailleListePrincipale > 2 and TailleListePrincipale <= 5:
     if TailleListePrincipale == 3 :
@@ -454,4 +463,4 @@ for loop in range(TailleListePrincipale):
     f.octave = ListeOctaveNote[loop]
     stream1.append(f)
 stream1.show()    
-
+ 
