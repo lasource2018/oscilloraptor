@@ -158,309 +158,311 @@ TailleListePrincipale = len(L)
 
 
 #création des listes de notes 
-for loop in range(TailleListePrincipale):
-    a = L[loop]
+def Octave(freq, sortin):
     n = 0
     # pour reconnaitre les notes, on les transpose à l'octave 3. Cela permet une meilleur optimisation
-    while a < 255 or a > 500 :
-        if a < 255:
-            a = a * 2
+    while freq < 255 or a > 500 :
+        if freq < 255:
+            freq = freq * 2
             n = n - 1
-        elif a > 500:
-            a = a/2
-            n = n + 1
-    n = n + 3
-    ListeOctaveNote.append(n)
+        elif freq > 500:
+            freq = freq/2
+            n = n + n
+    if sortin:
+        return n
+    else:
+        return freq
+def notefreqjuste (frequence, SortieLettre, Diese):
+    a = octave(frequence,False)
+    n = octave(frequence,True) + 3
     if a < 263 and a > 259:
-        ListeNote.append("C")
-        #calcule de la valeur exacte de la fréquence de la note 
-        a = 261.63 * 2 **(n-3)
-        ListeFrequenceJuste.append(a)
+        if SortieLettre:
+            return "C"
+        else: 
+            return 261.63 * 2 **(n-3)
     elif a < 279 and a > 275 :
-        # pour changer l'affichage de la sortie 
-        if Diese == 1:
-            ListeNote.append("C#")
-            a = 277.18 * 2 ** (n-3)
-            ListeFrequenceJuste.append(a)
+        if Diese :
+            if sortieLettre:
+                return "C#"
+            else:
+                return a = 277.18 * 2 ** (n-3)
         else:
-            ListeNote.append("Db")
-            a = 277.18 * 2 ** (n-3)
-            ListeFrequenceJuste.append(a)
+            if sortieLettre:
+                return "Db"
+            else:
+                return 277.18 * 2 ** (n-3)
     elif a < 295 and a > 290:
-        ListeNote.append("D")
-        a = 293.66 * 2 **(n-3)
-        ListeFrequenceJuste.append(a)
+        if SortieLettre:
+            return "D"
+        else :
+            return 293.66 * 2 **(n-3)
     elif a < 313 and a > 309:
-        if Diese == 1 :
-            ListeNote.append("D#")
-            a = 311.13 * 2 ** (n-3)
-            ListeFrequence.append(a)
+        if Diese:
+            if SortieLettre:
+                return "D#"
+            else:
+                return 311.13 * 2 ** (n-3)
         else:
-            ListeNote.append("Eb")
-            a = 311.13 * 2 ** (n-3)
-            ListeFrequence.append(a)
+            if Sortielettre:
+                return "Eb"
+            else:
+                return 311.13 * 2 ** (n-3)
     elif a < 332 and a > 326:
-        ListeNote.append("E")
-        a = 329.63 * 2 **(n-3)
-        ListeFrequenceJuste.append(a)
+        if SortieLettre:
+            return "E"
+        else :
+            return 329.63 * 2 **(n-3)
     elif a < 351 and a > 346:
-        ListeNote.append("F")
-        a = 349.23 * 2 ** (n-3)
-        ListeFrequenceJuste.append(a)
-    elif a < 371 and a > 366:
-        if Diese == 1:
-            ListeNote.append("F#")
-            a = 369.99 * 2 ** (n-3)
-            ListeFrequenceJuste.append(a)
-        else :
-            ListeNote.append("Gb")
-            a = 369.99 * 2 ** (n-3)
-            ListeFrequenceJuste.append(a)
-    elif a < 395 and a > 389:
-        ListeNote.append("G")
-        a = 392.00 * 2 ** (n-3)
-        ListeFrequenceJuste.append(a)
-    elif a < 418 and a > 412:
-        if Diese == 1:
-            ListeNote.append("G#")
-            a = 415.30 * 2 ** (n-3)
-            ListeFrequenceJuste.append(a)
-        else :
-            ListeNote.append("Ab")
-            a = 415.30 * 2 ** (n-3)
-            ListeFrequenceJuste.append(a)
-    elif a < 443 and a > 437:
-        ListeNote.append("A")
-        a = 440.00 * 2 ** (n-3)
-        ListeFrequenceJuste.append(a)
-    elif a < 469 and a > 463:
-        if Diese == 1:
-            ListeNote.append("A#")
-            a= 466.16 * 2 **(n-3)
-            ListeFrequenceJuste.append(a)
+        if SortieLettre:
+            return "F"
         else:
-            ListeNote.append("Bb")
-            a= 466.16 * 2 **(n-3)
-            ListeFrequenceJuste.append(a)
-            
+            return 349.23 * 2 ** (n-3)
+    elif a < 371 and a > 366:
+        if Diese:
+            if SortieLettre:
+                return "F#"
+            else:
+                return 369.99 * 2 ** (n-3)
+        else :
+            if SortieLettre:
+                return "Gb"
+            else:
+            return 369.99 * 2 ** (n-3)
+    elif a < 395 and a > 389:
+        if SortiLettre:
+            return "G"
+        else:
+            return 392.00 * 2 ** (n-3)
+    elif a < 418 and a > 412:
+        if Diese:
+            if SortieLettre:
+                return "G#"
+            else:
+                return 415.30 * 2 ** (n-3)
+        else :
+            if SortieLettre:
+                return "Ab"
+            else
+                return  415.30 * 2 ** (n-3)
+    elif a < 443 and a > 437:
+        if SortieLettre:
+           return "A"
+        else
+            return 440.00 * 2 ** (n-3)
+    elif a < 469 and a > 463:
+        if Diese:
+            if SortieLettre:
+                return "A#"
+            else
+                return 466.16 * 2 **(n-3)
+        else:
+            if SortieLettre:
+                return "Bb"
+            else :
+                return 466.16 * 2 **(n-3)
     elif a < 496 and 490:
-        ListeNote.append("B")
-        a = 493.88 * 2 ** (n-3)
-        ListeFrequenceJuste.append(a)
-"""
-print(ListeNote)
-print(ListeOctaveNote)
-"""
+        if SortieLettre:
+            return "B"
+        else:
+            return 493.88 * 2 ** (n-3)
 
 #fonction pour reconnaitre un intervalle, ou pour donner la position dans la liste
-def ton(L):
+def ton(L, pos):
     TailleListe = len(L)
     for loop in range(TailleListe):
         #calcule du rapport des frequence entre la note tonales et les autre notes
         quotient = L[Loop]/L[0]
         #rapport s'approche de 
         if quotien < 1.16 and > 1.10
-            return True
-            break
-def tiercemaj(L):
+            if pos:
+                return loop
+                break
+            else: 
+                return True
+                break
+def tiercemaj(L, pos):
     TailleListe = len(L)
     for loop in range(TailleListe):
         quotien = L[loop]/L[0]
         if quotien <1.26 and quotien > 1.24:
-            return True
-            break
-def tiercemin(L):
+            if pos == 1:
+                return loop
+                break
+            else :
+                return True
+                break
+def tiercemin(L, pos):
     TailleListe = len(L)
     for loop in range(TailleListe):
         quotien = L[loop]/L[0]
         if quotien < 1.23 and quotient > 1.18
-            return True
-            break
-def quartejuste(L):
+            if pos == 1:
+                return loop
+                break
+            else :
+                return True
+                break
+def quartejuste(L,pos):
     TailleListe = len(L)
     for loop in range(TailleListe):
         quotien = L[loop]/L[0]
         if quotien < 1.34 and quotien > 1.32:
-            return True
-            break
-
-def posquartejuste(L):
+            if pos == 1:
+                return loop
+            else :
+                return True
+                break
+        
+def quintejuste(L,pos):
     TailleListe = len(L)
     for loop in range(TailleListe):
         quotien = L[loop]/L[0]
-        if quotien < 1.34 and quotien > 1.32:
-            return loop
-            break
+        if quotien >1.49  and quotien < 1.51:
+            if pos == 1:
+                return loop
+                break
+            else:
+                return True
+                break
     
-def posquintejuste(L):
+def sixtemaj(L,pos):
     TailleListe = len(L)
-    for loop in range(TailleListe):
-        quotien = L[loop]/L[0]
-        if quotien >1.49  and quotien < 1.51:
-            return loop
-            break
-def quintejuste(L):
-    TailleListe = len(L)
-    for loop in range(TailleListe):
-        quotien = L[loop]/L[0]
-        if quotien >1.49  and quotien < 1.51:
-            return True
-            break
-def sixtemaj(L):
-    TailleListe = len(L)
-    positionquarte = posquartejuste(L)
+    positionquarte = quartejuste(L,True)
     for loop in range(TailleListe):
         quotien = L[loop]/L[positionquarte]
         if quotien > 1.33 and quotien < 1.37:
-            return True
-            break
-def septiememaje(L):
+            if pos == 1:
+                return loop
+                break
+            else:
+                return True
+                break
+
+def septiememaje(L,pos):
     TailleListe = len(L)
-    positionquinte = posquintejuste(L)
+    positionquinte = posquintejuste(L,True)
     for loop in range(TailleListe):
         quotien = L[loop]/L[positionquinte]
         if quotien <1.26 and quotien > 1.24:
-            return True
-            break
-def neuviememaj(L):
+            if pos ==1:
+                return loop
+                break
+            else:
+                return True
+                break
+def neuviememaj(L, pos):
     TailleListe = len(L)
     positionquinte = posquintejuste(L)
     valeurneuvieme = (L[positionquinte] * (3/2))/2
     for loop in range(TailleListe):
         quotien = L[loop]/valeurneuvieme
         if quotien > 0.9 and quotien <1 :
-            return True
-            break
+            if pos == 1 : 
+                return loop
+                break
+            else:
+                return True
+                break
 
-#détection de gammes 
-elif TailleListePrincipale >= 7:
-    if tiercemaj(ListeFrequenceJuste):
-        if quartejuste(ListeFrequenceJuste):
-            if septiememaje(ListeFrequenceJuste):
-                print(ListeNote[0], end = " ")
-                print("Ionien")
+def GammeDeffinisseur(Liste):
+    if tiercemaj(Liste, False):
+        if quartejuste(Liste, False):
+            if septiememaje(Liste, False):
+                return "Ionien"
             else:
-                print(ListeNote[0], end = " ")
-                print("Mixolydien")
+                return "Mixolydien"
         else :
-            print(ListeNote[0], end= " ")
-            print("lydien")
+            return "Lydien"
     else :
-        if quintejuste(ListeFrequenceJuste):
-            if sixtemaj(ListeFrequenceJuste):
-                if neuviememaj(ListeFrequenceJuste):
-                    print(ListeNote[0], end = " ")
-                    print("Aéolien")
+        if quintejuste(Liste, False):
+            if sixtemaj(Liste, False):
+                if neuviememaj(Liste, False):
+                    return "Aéolien"
                 else:
-                    print(ListeNote[0],end = " ")
-                    print("Phrygien")
+                    return "Phrygien"
             else:
-                print(ListeNote[0], end = " ")
-                print("Dorien")
+                return "Dorien"
         else:
-            print(ListeNote[0], end = " ")
-            print("Locrien")
+
+            return "Locrien"
 
 #Détections d'accords            
-elif TailleListePrincipale > 2 and TailleListePrincipale <= 5:
+def AccordDeffinisseurTaille3(Liste):
     if TailleListePrincipale == 3 :
-        if tiercemaj(ListeFrequenceJuste):
-            if quintejuste(ListeFrequenceJuste):
-                print(ListeNote[0], end ="")
+        if tiercemaj(Liste, False):
+            if quintejuste(Liste, False):
+               return " "
             elif
-                print(ListeNote[0], end ="")
-                print("6")
+                
+                return "6"
             else:
-                print("Unknown Chord")
-        elif tiercemin(ListeFrequenceJuste):
-            if quintejuste(ListeFRequenceJuste):
-                print(ListeNote[0], end ="")
-                print("m")
+                return "Unknown Chord"
+        elif tiercemin(Liste, False):
+            if quintejuste(Liste, False):
+                return "m"
             elif
-                print(ListeNote[0], end = "")
-                print("m6")
+                return "m6"
             else:
-                print("Unknown Chord")
-        elif quartejuste(ListeFrequenceJuste):
-            if quintejuste(ListeFrequenceJuste):
-                print(ListeNote[0], end ="")
-                print("sus4")
+                return "Unknown Chord"
+        elif quartejuste(Liste, False):
+            if quintejuste(Liste, False):
+                return "sus4"
             else :
-                print("Unknown Chord")
-        elif neuviememaj(ListeFrequenceJuste):
-            if quintejuste(ListeFrequenceJuste):
-                print(ListeNote[0], end ="")
-                print("sus2")
-        elif octave(ListeFrequenceJuste):
-            if quintejuste(ListeFrequenceJuste):
-                print(ListeNote[0], end ="")
-                print("PowerChord HEEEELL YEAH")
+                return "Unknown Chord"
+        elif neuviememaj(Liste, False):
+            if quintejuste(Liste, False):
+                return "sus2"
+        elif octave(Liste, False):
+            if quintejuste(Liste, False):
+                return "PowerChord HEEEELL YEAH"
             elif:
-                print("Unknown Chord")
+                return "Unknown Chord"
         else:
-            print("Unknown Chord")
-    if TailleListePrincipale == 4:
-        if septiememaj(ListeFrequenceJuste):
-            if tiercemaj(ListeFrequenceJuste):
-                if quintejuste(ListeFrequenceJuste):
-                    print(ListeNote[0], end ="")
-                elif
-                    print(ListeNote[0], end ="")
-                    print("6/7")
-                else:
-                    print("Unknown Chord")
-            elif tiercemin(ListeFrequenceJuste):
-                if quintejuste(ListeFRequenceJuste):
-                    print(ListeNote[0], end ="")
-                    print("m7")
-                elif
-                    print(ListeNote[0], end = "")
-                    print("m6/7")
-                else:
-                    print("Unknown Chord")
-            elif quartejuste(ListeFrequenceJuste):
-                if quintejuste(ListeFrequenceJuste):
-                    print(ListeNote[0], end ="")
-                    print("sus4/7")
-                else :
-                    print("Unknown Chord")
-            elif neuviememaj(ListeFrequenceJuste):
-                if quintejuste(ListeFrequenceJuste):
-                    print(ListeNote[0], end ="")
-                    print("sus2/7")
-                else:
-                    print("Unknown Chord")                    
-        elif septiememin(ListeFrequence Juste):
-
+            return "Unknown Chord"
+def accordsept(Liste):
+    if septiememin(Liste, False):
+        if AccordDeffinisseurTaille3(Liste, False) == "6" or "m6" or "sus4" or "sus2":
+            return"/7"
+        else:
+            return"7"
+    if septiememaj(Liste):
+        if AccordDeffinisseurTaille3(Liste) == "6" or "m6" or "sus4" or "sus2":
+            return "/∆"
         else :
-            print("Unknown Chord")
-    else:
-        print("Unknown Chord")
+            return "∆"
+    
 #détection d'intervalles            
-elif TailleListePrincipale == 2:
-    elif tiercemaj(ListeFrequenceJuste):
-        print("Tierce Majeur")    
-    elif quartejuste(ListeFrequenceJuste):
-        print("QuarteJuste")
-    elif quintejuste(ListeFrequenceJuste):
-        print("Quinte Juste")              
-    elif sixtemaj(ListeFrequenceJuste):
-        print("Sixte Majeur")
-#sortie Si une note pour dire la quelle s'est   
-elif TailleListePrincipale == 1:
-    print(ListeNote[0], end ="")
-    print(LIsteOctaveNote[0], end"")
+def IntervalleDeffinisseur(Liste):
+    if tiercemaj(Liste):
+        return "Tierce Majeur"   
+    elif quartejuste(Liste):
+        return "Quarte Juste"
+    elif quintejuste(Liste):
+        return "Quinte Juste"              
+    elif sixtemaj(Liste):
+        return "Sixte Majeur"
 
+def TrieurParTaille(Liste):
+    Taille = len(Liste)
+    if Taille == 1:
+        return Liste[0]
+    elif Taille == 2:
+        return IntervalleDeffinisseur(Liste)
+    elif Taille == 3
+        return AccordDeffinisseurTaille3(Liste)
+    elif Taille < 5:
+        return GammeDeffinisseur(Liste)
 """       
 affichage gamme
 besoin des liste ListeNote et ListeOctaveNote
 pour les transformer en liste music21
 """
-stream1 = stream.Stream()
-for loop in range(TailleListePrincipale):
-    f = note.Note("C4")
-    f.name = ListeNote[loop]
-    f.octave = ListeOctaveNote[loop]
-    stream1.append(f)
-stream1.show()    
+def Streamcreation(ListeNote,ListeOctaveNote):
+    stream1 = stream.Stream()
+    for loop in range(TailleListePrincipale):
+        Note1 = note.Note("C4")
+        Note1.name = ListeNote[loop]
+        Note1.octave = ListeOctaveNote[loop]
+        stream1.append(Note1)
+    return stream1
  
