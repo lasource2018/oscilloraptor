@@ -5,14 +5,14 @@ from time import sleep
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-from music21 import *
+from music21 import
 
 def lecture_Son(nomFichier) :
     
     data = []
     f = wave.open(nomFichier, 'rb')
 
-    nbreCanaux = f.getnchannels()
+    nbCanaux = f.getnchannels()
     nbreEchant = f.getnframes()
     tailleEchant = f.getsampwidth()
     fech = f.getframerate()
@@ -24,10 +24,11 @@ def lecture_Son(nomFichier) :
 
     print("Lecture du fichier...")
     """
+    
     if tailleEchant == 2 :
         for i in range(nbreEchant) :
             b = f.readframes(1)
-            val = struct.unpack('h', b)
+            val = struct.unpack('2h', b)
             data.append(val[0])
     elif tailleEchant == 1 :
         for i in range(nbreEchant) :
@@ -38,7 +39,7 @@ def lecture_Son(nomFichier) :
         print("Format de fichier non reconnu")
         
     
-    return data,nbCanaux,nbreEchant,fech
+    return f,data,nbCanaux,nbreEchant,fech
 
 
 def Ecriture_Son(nomFichier, listeEch) :
@@ -77,86 +78,81 @@ def octave(freq):
             freq = freq/2
             n = n + 1
     return freq, n
+    
 Diese = 1        
+
 def notefreqjuste (frequence, Diese): #Diese = 1 ou 0 selon affichage b ou #
     a, n = octave(frequence)
-    #n = octave(frequence,True) + 3
-    if  263 < a < 259:
-         return "C"
+    if  259 < a < 263:
+         return "C",n
 
-    elif 274 < a 279:
+    elif 274 < a < 279:
          if Diese:
-             return "C#"
+             return "C#",n
          else:
-             return "Db"
+             return "Db",n
    
             
     elif 290 < a < 295:
-         return "D"
+         return "D",n
 
             
     elif 309 < a < 313:
          if Diese:
-             return "D#"
+             return "D#",n
          else:
-             return "Eb"
+             return "Eb",n
 
             
-    elif 326 < a 323:
-         return "E"
+    elif 326 < a <332:
+         return "E",n
 
             
     elif 346 < a < 351:
-         return "F"
+         return "F",n
 
-    elif 366 < a 371:
-        if SortieLettre:
-            if Diese:
-                return "F#"
-            else :
-                return "Gb"
+    elif 366 < a < 371:
+        if Diese:
+            return "F#",n
+        else :
+            return "Gb",n
 
     elif 389 < a < 395:
-        if SortiLettre:
-            return "G"
+        return "G",n
 
     elif 412 < a < 418:
-        if SortieLettre:
-            if Diese:
-                return "G#"
-            else:
-                return "Ab"
+        if Diese:
+            return "G#",n
+        else:
+            return "Ab",n
 
     elif 437 < a < 443:
-        if SortieLettre:
-           return "A"
+        return "A",n
 
     elif  463 < a < 469:
-        if SortieLettre:
-            if Diese:
-                return "A#"
-            else:
-                return "Bb"
+        if Diese:
+            return "A#",n
+        else:
+            return "Bb",n
 
     elif 490 < a < 496:
-        if SortieLettre:
-            return "B"
+        return "B",n
 
 
-oc = { "Do": 131, "Do#": 139, "Re": 147, "Re#": 156, "Mi": 165, "Fa": 175, "Fa#": 185, "Sol": 196, "Sol#": 208, "La": 220, "Sib" :233, "Si" : 247 }
+oc = { "C": 131, "C#": 139, "D": 147, "D#": 156, "E": 165, "F": 175, "F#": 185, "G": 196, "G#": 208, "A": 220, "A#" :233, "B" : 247 }
 
-oc2 = { "C":  261.63, "C#": 277.18, "D": 293.66, "D#": 311.13, "E":329.63, "F":349.23, "F#": 369.99, "G": 392.00, "G#": 415.30, "A": 440.00, "Bb" :466.16, "B" :  493.88, "C2" : 523 }
+oc2 = { "C":  261.63, "C#": 277.18, "D": 293.66, "D#": 311.13, "E":329.63, "F":349.23, "F#": 369.99, "G": 392.00, "G#": 415.30, "A": 440.00, "A#" :466.16, "B" :  493.88, "C2" : 523 }
 
-DoM = [oc["Do"],oc["Re"],oc["Mi"],oc["Fa"],oc["Sol"],oc["La"],oc["Si"],oc2["Do"] ] 
+DoM = [oc["C"],oc["D"],oc["E"],oc["F"],oc["G"],oc["A"],oc["B"],oc2["C2"] ] 
 
 #Gammes avec #
-SolM = [oc["Sol"],oc["La"],oc["Si"],oc2["Do"],oc2["Re"],oc2["Mi"],oc2["Fa#"],oc2["Sol"]]
-ReM = [oc["Re"],oc["Mi"],oc["Fa#"],oc["Sol"],oc["La"],oc["Si"],oc2["Do#"],oc2["Re"]]
-LaM = [oc["La"],oc["Si"],oc2["Do#"],oc2["Re"],oc2["Mi"],oc2["Fa#"],oc2["Sol#"],oc2["La"]] 
-MiM = [oc["Mi"],oc["Fa#"],oc["Sol#"],oc["La"],oc["Si"],oc2["Do#"],oc2["Re#"],oc2["Mi"]] 
-SiM = [oc["Si"],oc2["Do#"],oc2["Re#"],oc2["Mi"],oc2["Fa#"],oc2["Sol#"],oc2["Sib"],oc2["Si"]] 
-Fa_M = [oc["Fa#"],oc["Sol#"],oc["Sib"],oc["Si"],oc2["Do#"],oc2["Re#"],oc2["Fa"],oc2["Fa#"]] 
-Do_M = [oc["Do#"],oc["Re#"],oc["Fa"],oc["Fa#"],oc["Sol#"],oc["Sib"],oc["Do"],oc2["Do#"]]
+GM = [oc["G"],oc["A"],oc["B"],oc2["C"],oc2["D"],oc2["E"],oc2["F#"],oc2["G"]]
+DM = [oc["D"],oc["E"],oc["F#"],oc["G"],oc["A"],oc["B"],oc2["C#"],oc2["D"]]
+AM = [oc["A"],oc["B"],oc2["C#"],oc2["D"],oc2["E"],oc2["F#"],oc2["G#"],oc2["A"]] 
+EM = [oc["E"],oc["F#"],oc["G#"],oc["A"],oc["B"],oc2["C#"],oc2["D#"],oc2["E"]] 
+BM = [oc["B"],oc2["C#"],oc2["D#"],oc2["E"],oc2["F#"],oc2["G#"],oc2["A#"],oc2["B"]] 
+F_M = [oc["F#"],oc["G#"],oc["A#"],oc["B"],oc2["C#"],oc2["D#"],oc2["F"],oc2["F#"]] 
+C_M = [oc["C#"],oc["D#"],oc["F"],oc["F#"],oc["G#"],oc["A#"],oc["C"],oc2["C#"]]
 
 #Gammes avec bémol
 # A faire
@@ -171,19 +167,19 @@ def ecrire_gamme(nom_fichier,gamme,amplitude,tps_note):
         E.extend(O)
     Ecriture_Son(nom_fichier, E)
     
-ecrire_gamme("gamme_SolM.wav",SolM,5000,1)
+#ecrire_gamme("gamme_GM.wav",GM,5000,1)
 
 
 def func(x,a,b,c):
     return c * np.exp( -np.power( (x-a)/b, 2) )
  
-plt.ion()   # utilise pyplot en interactif
+#plt.ion()   # utilise pyplot en interactif
  
 # Ouverture du fichier wav a decrypter
-x, nbCanaux, nbFrames, fech = lecture_Son("gamme.wav")
+f, x, nbCanaux, nbFrames, fech = lecture_Son("pianoDM.wav")
 
 #Decouper le fichier pour analyser chaque note après l'autre 
-frequences, freq_gauss, FreqNoteJuste, = [], [], []
+frequences, freq_gauss, FreqNoteJuste = [], [], []
 larg_frame = 44100
 for posi in range(0,nbFrames,larg_frame):
  
@@ -207,15 +203,14 @@ for posi in range(0,nbFrames,larg_frame):
     popt, pcov = curve_fit( func, freqs[ind], sig[ind]/maxi, p0=[f0,1,1] )
     a, b, c = popt
     freq_gauss.append(a)
-    note = notefreqjuste (frequence, Diese)
+    note, n = notefreqjuste (a, Diese)
     print(note)
-    FreqNoteJuste.append(oc2[note])
+    FreqNoteJuste.append(oc2[note]*(n-1))
     
 f.close()
-print(freqNoteJuste)
-  
-for res in (frequences,freq_gauss):
-    print(np.round(res, 0))
+for i in range(len(FreqNoteJuste)):
+    print(FreqNoteJuste[i])
+
 #Analyse des Fréquences fournit soit par le générateur ou l'analyseur 
 """    
 A = [261.63, 293.66, 329.63, 349.23, 392.00,440.00, 493.88]
