@@ -161,8 +161,8 @@ Bm= [oc["B"],oc2["C#"],oc2["D"],oc2["E"],oc2["F#"],oc2["G"],oc2["A#"],oc2["B"]]
 F_m = [oc["F#"],oc["G#"],oc["A"],oc["B"],oc2["C#"],oc2["D"],oc2["F"],oc2["F#"]]
 C_m = [oc["C#"],oc["D#"],oc["E"],oc["F#"],oc["G#"],oc["A"],oc["C"],oc2["C#"]]
 G_m = [oc["G#"],oc["A#"],oc["B"],oc2["C#"],oc2["D#"],oc2["E"],oc2["G"],oc2["G#"]]
-D_m = [oc["D#"],oc["E#"],oc["F#"],oc["G#"],oc["A#"],oc["B#"],oc2["D"],oc2["D#"]]
-A_m = [oc["A#"],oc["B#"],oc2["C#"],oc2["D#"],oc2["E#"],oc2["F#"],oc2["A"],oc2["A#"]] 
+D_m = [oc["D#"],oc["F"],oc["F#"],oc["G#"],oc["A#"],oc["C"],oc2["D"],oc2["D#"]]
+A_m = [oc["A#"],oc["C"],oc2["C#"],oc2["D#"],oc2["F"],oc2["F#"],oc2["A"],oc2["A#"]] 
 
 #Gammes Majeures avec bémol
 FM = [oc["F"],oc["G"],oc["A"],oc["Bb"],oc2["C"],oc2["D"],oc2["E"],oc2["F"]]
