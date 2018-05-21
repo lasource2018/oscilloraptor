@@ -87,7 +87,7 @@ def notefreqjuste (frequence, Diese): #Diese = 1 ou 0 selon affichage b ou #
          return "C",n
 
     elif 274 < a < 279:
-         if Diese:
+         if Diese == 1:
              return "C#",n
          else:
              return "Db",n
@@ -98,7 +98,7 @@ def notefreqjuste (frequence, Diese): #Diese = 1 ou 0 selon affichage b ou #
 
             
     elif 309 < a < 313:
-         if Diese:
+         if Diese == 1:
              return "D#",n
          else:
              return "Eb",n
@@ -112,7 +112,7 @@ def notefreqjuste (frequence, Diese): #Diese = 1 ou 0 selon affichage b ou #
          return "F",n
 
     elif 366 < a < 371:
-        if Diese:
+        if Diese == 1:
             return "F#",n
         else :
             return "Gb",n
@@ -121,7 +121,7 @@ def notefreqjuste (frequence, Diese): #Diese = 1 ou 0 selon affichage b ou #
         return "G",n
 
     elif 412 < a < 418:
-        if Diese:
+        if Diese == 1:
             return "G#",n
         else:
             return "Ab",n
@@ -130,7 +130,7 @@ def notefreqjuste (frequence, Diese): #Diese = 1 ou 0 selon affichage b ou #
         return "A",n
 
     elif  463 < a < 469:
-        if Diese:
+        if Diese == 1:
             return "A#",n
         else:
             return "Bb",n
@@ -179,9 +179,11 @@ def func(x,a,b,c):
 f, x, nbCanaux, nbFrames, fech = lecture_Son("pianoDM.wav")
 
 #Decouper le fichier pour analyser chaque note après l'autre 
-frequences, freq_gauss, FreqNoteJuste = [], [], []
+frequences, freq_gauss, FreqNoteJuste, ListeNote = [], [], [], []
 larg_frame = 44100
+i = 0
 for posi in range(0,nbFrames,larg_frame):
+    
  
     # Sequence contenant une note
     f.setpos(posi)
@@ -204,7 +206,8 @@ for posi in range(0,nbFrames,larg_frame):
     a, b, c = popt
     freq_gauss.append(a)
     note, n = notefreqjuste (a, Diese)
-    print(note)
+    ListeNote[i] = note
+    i += 1
     FreqNoteJuste.append(oc2[note]*(n-1))
     
 f.close()
@@ -232,10 +235,10 @@ TailleListePrincipale = len(L)
 def IntervalleBasique(L,Intervalle, PositionListe):
     TailleListe = len(L)
     for loop in range(TailleListe):
-        quotient = L[loop]/L[0]
-        if 2.2 < quotient < 1.8 and Intervalle == "Octave":
+        quotien = L[loop]/L[0]
+        if 2.2 < quotien < 1.8 and Intervalle == "Octave":
             return True
-        if 1.49 < quotient < 1.51 and Intervalle == "Quinte":
+        if 1.49 < quotien < 1.51 and Intervalle == "Quinte":
             if PositionListe:
                 return loop
             else :
@@ -247,10 +250,10 @@ def IntervalleBasique(L,Intervalle, PositionListe):
             else :
                 return True
             break
-        elif 1.18 < quotient <1.23 and Intervalle == "TierceMin":
+        elif 1.18 < quotient <1.23 and Intervalle == "Tierce_maj":
             return True
             break
-        elif 1.24 <quotient <1.26 and Intervalle == "TierceMaj":
+        elif 1.26 < quotient <1.24 and Intervalle == "Tierce_min":
             return True
             break
         elif 1.16 < quotient < 1.10 and Intervalle == "Seconde":
@@ -275,26 +278,27 @@ def IntervalleComplexe(L, Intervalle, CalcVTheorique):
            ValeurIntervalle = L[IntervalleBasique(L,"Quinte", True)]*(5/4)
         elif Intervalle == "SeptiemeMin":
             ValeurIntervalle = L[IntervalleBasique(L, "Quinte",True)]*(3/2)
-        if Intervalle == "Neuvieme":
-            ValeurIntervalle = L[IntervalleBasique(L,"Quinte", True)] * (3/2)/2
+        if Interalle == "Neuvieme":
+            ValeurIntervalle = L[IntervalleBasique[L,"Quinte", True] * (3/2)/2
     for loop in range(TailleListe):
-        quotient = L[loop]/ValeurIntervalle
-        if 0.9 < quotient <= 1.01:
+        quotien = L[loop]/ValeurIntervalle
+        if 0.9 < quotien <= 1:
                 return True
                 break
 
+    print("yes")
 def GammeDeffinisseur(Liste):
     try:
         if IntervalleBasique(Liste, "TierceMaj",False):
             if IntervalleBasique(Liste,"Quarte", False) :
-                if IntervalleComplexe(Liste, "SeptiemeMaj", False):
+                if IntervalleComplexe(Liste, "SeptiemeMaj", True):
                     return "Ionien"
                 else:
                     return "Mixolydien"
             else :
                 return "Lydien"
         else :
-            if IntervalleBasique(Liste, "Quinte", False):
+            if IntervalleBasique(Liste, False):
                 if IntervalleComplexe(Liste,"Sixte", True):
                     if Intervallecomplexe(Liste,"Neuvieme", True):
                         return "Aéolien"
@@ -310,7 +314,7 @@ def GammeDeffinisseur(Liste):
 #Détections d'accords            
 def AccordDeffinisseurTaille3(Liste):
     try :
-        if IntervalleBasique(Liste, "TierceMaj", False):
+        if IntervalleBasique(Liste, False):
             if IntervalleBasique(Liste,"Quinte", False):
                 return ""
             elif IntervalleComplexe(Liste, "Sixte",True):
@@ -318,7 +322,7 @@ def AccordDeffinisseurTaille3(Liste):
         elif IntervalleBasique(Liste,"TierceMin", False):
             if IntervalleBasique(Liste,"Quinte", False):
                 return "m"
-            elif IntervalleComplexe(Liste,"Sixte", True):
+            elif
                 return "m6"
         elif IntervalleBasique(Liste,"Quarte", False):
             if IntervalleBasique(Liste,"Quinte", False):
@@ -333,16 +337,16 @@ def AccordDeffinisseurTaille3(Liste):
         return "Unknown Chord"
 def AccordDeffinisseurTaille4(Liste):
     try:
-        if IntervalleComplexe(Liste,"SeptiemeMin", True):
+        if IntervalleComplexe(Liste,"SeptiemeMin", False):
             if AccordDeffinisseurTaille3(Liste, False) == "6" or "m6" or "sus4" or "sus2":
                 return AccordDeffinisseurTaille3(Liste),"/7"
             else:
-                return AccordDeffinisseurTaille3(Liste),"7"
-        if IntervalleComplexe(Liste,"SeptiemeMaj",True):
+                return AccordDeffiniesseurTaille3(Liste),"7"
+        if IntervalleComplexe(Liste, ):
             if AccordDeffinisseurTaille3(Liste) == "6" or "m6" or "sus4" or "sus2":
-                return AccordDeffinisseurTaille3(Liste), "/∆"
+                return AccordDeffiniesseurTaille3(Liste), "/∆"
             else :
-                return AccordDeffinisseurTaille3(Liste), "∆"
+                return AccordDeffiniesseurTaille3(Liste), "∆"
     except:
         return AccordDeffinisseurTaille3(Liste)
     
@@ -358,18 +362,16 @@ def IntervalleDeffinisseur(Liste):
     except:
         return "Erreur"
 
-def Sorti(ListeFreq,ListeNote):
-    Taille = len(ListeFreq)
+def Sortie(Liste):
+    Taille = len(Liste)
     if Taille == 1:
-        return ListeNote[0]
+        return Liste[0]
     elif Taille == 2:
-        return ListeNote[0], IntervalleDeffinisseur(ListeFreq)
-    elif Taille == 3 or 4:
-        return ListeNote[0], AccordDeffinisseurTaille4(ListeFreq)
-    elif Taille > 5:
-        return ListeNote[0], GammeDeffinisseur(ListeFreq)
-
-
+        return Liste[0], IntervalleDeffinisseur(Liste)
+    elif Taille == 3
+        return Liste[0], AccordDeffinisseurTaille4(Liste)
+    elif Taille < 5:
+        return Liste[0], GammeDeffinisseur(Liste)
 """       
 affichage gamme
 besoin des liste ListeNote et ListeOctaveNote
