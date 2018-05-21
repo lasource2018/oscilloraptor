@@ -279,83 +279,80 @@ def intervalleComplexe(L, Intervalle, CalcVTheorique):
         if 0.9 < quotien <= 1:
                 return True
                 break
-
 def GammeDeffinisseur(Liste):
-    if tiercemaj(Liste, False):
-        if quartejuste(Liste, False):
-            if septiememaj(Liste, False, False):
-                return "Ionien"
-            else:
-                return "Mixolydien"
-        else :
-            return "Lydien"
-    else :
-        if quintejuste(Liste, False):
-            if sixtemaj(Liste, False, False):
-                if ton(Liste, False):
-                    return "Aéolien"
+    try:
+        if IntervalleBasique(Liste, "TierceMaj",False):
+            if IntervalleBasique(Liste,"Quarte", False) :
+                if IntervalleComplexe(Liste, "SeptiemeMaj", True):
+                    return "Ionien"
                 else:
-                    return "Phrygien"
+                    return "Mixolydien"
+            else :
+                return "Lydien"
+        else :
+            if IntervalleBasique(Liste, False):
+                if IntervalleComplexe(Liste,"Sixte", True):
+                    if Intervallecomplexe(Liste,"Neuvieme", True):
+                        return "Aéolien"
+                    else:
+                        return "Phrygien"
+                else:
+                    return "Dorien"
             else:
-                return "Dorien"
-        else:
-            return "Locrien"
+                return "Locrien"
+    except:
+        return "Erreur"
 
 #Détections d'accords            
 def AccordDeffinisseurTaille3(Liste):
-    if TailleListePrincipale == 3 :
-        if tiercemaj(Liste, False):
-            if quintejuste(Liste, False):
-               return " "
-            elif sixtemaje(Liste, False,True):
-                return "6"
-            else:
-                return "Unknown Chord"
-        elif tiercemin(Liste, False):
-            if quintejuste(Liste, False):
+    try :
+        if IntervalleBasique(Liste, False):
+            if IntervalleBasique(Liste,"Quinte", False):
+                return ""
+            elif IntervalleComplexe(Liste, "Sixte",True):
+                 return "6"
+        elif IntervalleBasique(Liste,"TierceMin", False):
+            if IntervalleBasique(Liste,"Quinte", False):
                 return "m"
             elif
                 return "m6"
-            else:
-                return "Unknown Chord"
-        elif quartejuste(Liste, False):
-            if quintejuste(Liste, False):
-                return "sus4"
-            else :
-                return "Unknown Chord"
-        elif neuviememaj(Liste, False):
-            if quintejuste(Liste, False):
+        elif IntervalleBasique(Liste,"Quarte", False):
+            if IntervalleBasique(Liste,"Quinte", False):
+                    return "sus4"
+        elif IntervalleComplexe(Liste,"Neuvevieme", False):
+            if IntervalleBasique(Liste,"Quinte", False):
                 return "sus2"
-        elif octave(Liste, False):
-            if quintejuste(Liste, False):
+        elif IntervalleBasique(Liste, "Octave", False):
+            if IntervalleBasique(Liste,"Quinte", False):
                 return "PowerChord HEEEELL YEAH"
-            elif:
-                return "Unknown Chord"
-        else:
-            return "Unknown Chord"
-def accordsept(Liste):
-    if septiememin(Liste, False):
-        if AccordDeffinisseurTaille3(Liste, False) == "6" or "m6" or "sus4" or "sus2":
-            return"/7"
-        else:
-            return"7"
-    if septiememaj(Liste):
-        if AccordDeffinisseurTaille3(Liste) == "6" or "m6" or "sus4" or "sus2":
-            return "/∆"
-        else :
-            return "∆"
+    except:
+        return "Unknown Chord"
+def AccordDeffinisseurTaille4(Liste):
+    try:
+        if IntervalleComplexe(Liste,"SeptiemeMin", False):
+            if AccordDeffinisseurTaille3(Liste, False) == "6" or "m6" or "sus4" or "sus2":
+                return AccordDeffinisseurTaille3(Liste),"/7"
+            else:
+                return AccordDeffiniesseurTaille3(Liste),"7"
+        if IntervalleComplexe(Liste, ):
+            if AccordDeffinisseurTaille3(Liste) == "6" or "m6" or "sus4" or "sus2":
+                return AccordDeffiniesseurTaille3(Liste), "/∆"
+            else :
+                return AccordDeffiniesseurTaille3(Liste), "∆"
+    except:
+        return AccordDeffinisseurTaille3(Liste)
     
-#détection d'intervalles            
 #détection d'intervalles            
 def IntervalleDeffinisseur(Liste):
     try:
         Intervalle = ["Seconde","TierceMaj","TierceMin","Quarte","Quinte","Sixt","SeptiemeMin","septiemeMaj"]
         n = 0
         while n <= len(Intervalle):
-            if IntervalleBasique(Liste, Intervalle[n], False) or IntervalleComplexe(Liste, Intervalle[n], False):
+            if IntervalleBasique(Liste, Intervalle[n], False) or IntervalleComplexe(Liste, Intervalle[n], True):
                 return Intervalle[n]
             n = n + 1
-
+    except:
+        return "Erreur"
 def TrieurParTaille(Liste):
     Taille = len(Liste)
     if Taille == 1:
