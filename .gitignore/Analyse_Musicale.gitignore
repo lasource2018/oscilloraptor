@@ -227,126 +227,56 @@ TailleListePrincipale = len(L)
 
 #création des listes de notes 
 
-
-#fonction pour reconnaitre un intervalle, ou pour donner la position dans la liste
-def ton(L, pos):
-    TailleListe = len(L)
-    for loop in range(TailleListe):
-        #calcule du rapport des frequence entre la note tonales et les autre notes
-        quotient = L[Loop]/L[0]
-        #rapport s'approche de 
-        if quotien < 1.16 and > 1.10
-            if pos:
-                return loop
-                break
-            else: 
-                return True
-                break
-def tiercemaj(L, pos):
+#définission des intervalles        
+def IntervalleBasique(L,Intervalle, PositionListe):
     TailleListe = len(L)
     for loop in range(TailleListe):
         quotien = L[loop]/L[0]
-        if quotien <1.26 and quotien > 1.24:
-            if pos == 1:
+        if quotien >1.49  and quotien < 1.51 and Intervalle == "Quinte":
+            if PositionListe:
                 return loop
-                break
-            else :
+            elif :
                 return True
-                break
-def tiercemin(L, pos):
-    TailleListe = len(L)
-    for loop in range(TailleListe):
-        quotien = L[loop]/L[0]
-        if quotien < 1.23 and quotient > 1.18
-            if pos == 1:
+            break
+        elif 1.32 > quotient >1.34  and Intervalle =="Quarte":
+            if PositionListe:
                 return loop
-                break
-            else :
+            elif :
                 return True
-                break
-def quartejuste(L,pos):
+            break
+        elif 1.18 < quotient <1.23 and Intervalle == "Tierce_maj":
+            return True
+            break
+        elif 1.26 < quotient <1.24 and Intervalle == "Tierce_min":
+            return True
+            break
+        elif 1.16 < quotient < 1.10 and Intervalle == "Seconde":
+            return True
+            break
+           
+def intervalleComplexe(L, Intervalle, CalcVTheorique):
     TailleListe = len(L)
-    for loop in range(TailleListe):
-        quotien = L[loop]/L[0]
-        if quotien < 1.34 and quotien > 1.32:
-            if pos == 1:
-                return loop
-            else :
-                return True
-                break
-        
-def quintejuste(L,pos):
-    TailleListe = len(L)
-    for loop in range(TailleListe):
-        quotien = L[loop]/L[0]
-        if quotien >1.49  and quotien < 1.51:
-            if pos == 1:
-                return loop
-                break
-            else:
-                return True
-                break
-    
-def sixtemaj(L,pos, CalcVTheorique):
-    TailleListe = len(L)
-    if CalcVTheorique:
-        Valeursixte = L[0] * (5/4) *(4/3)
+    if CalcVTheorique :
+        if Intervalle == "Sixte":
+            ValeurIntervalle = L[0] * (5/4) *(4/3)
+        elif Intervalle == "SeptiemeMaj":
+            ValeurIntervalle = L[0] * (3/2) * (5/4)
+        elif Intervalle == "SeptiemeMin":
+            ValeurIntervalle = L[0] * (3/2) * (3/2)
+        elif Intervalle == "Neuvieme":
+            ValeurIntervalle = (L[0] * (3/2)*(4/3))/2
     else:
-        Valeursixte = L[quartejuste(L,True)] * (5/3)
+        if Intervalle == "Sixte":
+            ValeurIntervalle = L[IntervalleBasique(L,"Quarte",True)] * (5/3)
+        elif Intervalle == "SeptiemeMaj":
+           ValeurIntervalle = L[IntervalleBasique(L,"Quinte", True)]*(5/4)
+        elif Intervalle == "SeptiemeMin":
+            ValeurIntervalle = L[IntervalleBasique(L, "Quinte",True)]*(3/2)
+        if Interalle == "Neuvieme":
+            ValeurIntervalle = L[IntervalleBasique[L,"Quinte", True] * (3/2))/2
     for loop in range(TailleListe):
-        quotien = L[loop]/Valeursixte
+        quotien = L[loop]/ValeurIntervalle
         if 0.9 < quotien <= 1:
-            if pos == 1:
-                return loop
-                break
-            else:
-                return True
-                break
-
-def septiememaj(L,pos,CalcVTheorique):
-    TailleListe = len(L)
-    if CalcVTheorique:
-        Valeurseptieme = L[0] * (3/2) * (5/4)
-    else:
-        Valeurseptieme = L[quintejuste(L,True)]*(5/4)
-    for loop in range(TailleListe):
-        quotien = L[loop]/Valeurseptieme
-        if 0.9 < quotien < 1:
-            if pos ==1:
-                return loop
-                break
-            else:
-                return True
-                break
-def septiememin(L,pos,CalcVTheorique):
-    TailleListe = len(L)
-    if CalcVTheorique:
-        Valeurseptieme = L[0] * (3/2) * (3/2)
-    else:
-        Valeurseptieme = L[quintejuste(L,True)]*(3/2)
-    for loop in range(TailleListe):
-        quotien = L[loop]/Valeurseptieme
-        if 0.9 < quotien < 1:
-            if pos ==1:
-                return loop
-                break
-            else:
-                return True
-                break
-def neuviememaj(L, pos, CalcVThéorique):
-    TailleListe = len(L)
-    if CalcVThéorique:
-        valeurneuvieme = (L[0] * (3/2)*(4/3))/2
-    else :
-        positionquinte = quintejuste(L,True)
-        valeurneuvieme = L[positionquinte] * (3/2))/2
-    for loop in range(TailleListe):
-        quotien = L[loop]/valeurneuvieme
-        if quotien > 0.9 and quotien <1 :
-            if pos == 1 : 
-                return loop
-                break
-            else:
                 return True
                 break
 
