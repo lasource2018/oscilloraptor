@@ -105,7 +105,7 @@ plt.ion()   # utilise pyplot en interactif
 f,x, nbCanaux, nbFrames, fech = lecture_Son("gamme.wav")
 
 #Decouper le fichier pour analyser chaque note après l'autre 
-frequences, freq_gauss = [], []
+frequences, freq_gauss, FreqNoteJuste, ListeNote = [], [], []
 larg_frame = 44100
 for posi in range(0,nbFrames,larg_frame):
  
@@ -129,6 +129,7 @@ for posi in range(0,nbFrames,larg_frame):
     popt, pcov = curve_fit( func, freqs[ind], sig[ind]/maxi, p0=[f0,1,1] )
     a, b, c = popt
     freq_gauss.append(a)
+    FreqNoteJuste.append(notefreqJuste(a, False, False))
     
 
 f.close()
@@ -145,14 +146,6 @@ L = [3520.00, 3951.07,4186.01,4698.64,5274.04, 5587.65,6271.93]
 Diese = 1
 """
 
-#variable et Tableau
-
-ListeNote = []
-#La liste va contenir le nom des notes sous la notation anglaise "A,B,C,D,E,F,G"
-ListeOctaveNote = []
-#contient la hauteur de la note par rapport à un chiffre allant de 0 à 7
-ListeFrequenceJuste = []
-#contient les fréquences accordées, afin de réduire les erreures de calcules 
 ListeNoteMusic21 = []
 TailleListePrincipale = len(L)
 
@@ -181,32 +174,26 @@ def notefreqjuste (frequence, SortieLettre, Diese):
         else: 
             return 261.63 * 2 **(n-3)
     elif a < 279 and a > 275 :
-        if Diese :
-            if sortieLettre:
+        if sortieLettre:
+            if Diese:
                 return "C#"
             else:
-                return a = 277.18 * 2 ** (n-3)
-        else:
-            if sortieLettre:
                 return "Db"
-            else:
-                return 277.18 * 2 ** (n-3)
+        else:
+            return 277.18 * 2 ** (n-3)
     elif a < 295 and a > 290:
         if SortieLettre:
             return "D"
         else :
             return 293.66 * 2 **(n-3)
     elif a < 313 and a > 309:
-        if Diese:
-            if SortieLettre:
+        if SortieLettre:
+            if Diese:
                 return "D#"
             else:
-                return 311.13 * 2 ** (n-3)
-        else:
-            if Sortielettre:
                 return "Eb"
-            else:
-                return 311.13 * 2 ** (n-3)
+        else:
+            return 311.13 * 2 ** (n-3)
     elif a < 332 and a > 326:
         if SortieLettre:
             return "E"
@@ -218,15 +205,12 @@ def notefreqjuste (frequence, SortieLettre, Diese):
         else:
             return 349.23 * 2 ** (n-3)
     elif a < 371 and a > 366:
-        if Diese:
-            if SortieLettre:
+        if SortieLettre:
+            if Diese:
                 return "F#"
-            else:
-                return 369.99 * 2 ** (n-3)
-        else :
-            if SortieLettre:
+            else :
                 return "Gb"
-            else:
+        else:
             return 369.99 * 2 ** (n-3)
     elif a < 395 and a > 389:
         if SortiLettre:
@@ -234,32 +218,26 @@ def notefreqjuste (frequence, SortieLettre, Diese):
         else:
             return 392.00 * 2 ** (n-3)
     elif a < 418 and a > 412:
-        if Diese:
-            if SortieLettre:
+        if SortieLettre:
+            if Diese:
                 return "G#"
             else:
-                return 415.30 * 2 ** (n-3)
-        else :
-            if SortieLettre:
                 return "Ab"
-            else
-                return  415.30 * 2 ** (n-3)
+        else
+            return  415.30 * 2 ** (n-3)
     elif a < 443 and a > 437:
         if SortieLettre:
            return "A"
-        else
+        else:
             return 440.00 * 2 ** (n-3)
     elif a < 469 and a > 463:
-        if Diese:
-            if SortieLettre:
+        if SortieLettre:
+            if Diese:
                 return "A#"
-            else
-                return 466.16 * 2 **(n-3)
-        else:
-            if SortieLettre:
+            else:
                 return "Bb"
-            else :
-                return 466.16 * 2 **(n-3)
+        else :
+            return 466.16 * 2 **(n-3)
     elif a < 496 and 490:
         if SortieLettre:
             return "B"
@@ -325,12 +303,15 @@ def quintejuste(L,pos):
                 return True
                 break
     
-def sixtemaj(L,pos):
+def sixtemaj(L,pos, CalcVTheorique):
     TailleListe = len(L)
-    positionquarte = quartejuste(L,True)
+    if CalcVTheorique:
+        Valeursixte = L[0] * (5/4) *(4/3)
+    else:
+        Valeursixte = L[quartejuste(L,True)] * (5/3)
     for loop in range(TailleListe):
-        quotien = L[loop]/L[positionquarte]
-        if quotien > 1.33 and quotien < 1.37:
+        quotien = L[loop]/Valeursixte
+        if 0.9 < quotien <= 1:
             if pos == 1:
                 return loop
                 break
@@ -338,22 +319,43 @@ def sixtemaj(L,pos):
                 return True
                 break
 
-def septiememaje(L,pos):
+def septiememaj(L,pos,CalcVTheorique):
     TailleListe = len(L)
-    positionquinte = posquintejuste(L,True)
+    if CalcVTheorique:
+        Valeurseptieme = L[0] * (3/2) * (5/4)
+    else:
+        Valeurseptieme = L[quintejuste(L,True)]*(5/4)
     for loop in range(TailleListe):
-        quotien = L[loop]/L[positionquinte]
-        if quotien <1.26 and quotien > 1.24:
+        quotien = L[loop]/Valeurseptieme
+        if 0.9 < quotien < 1:
             if pos ==1:
                 return loop
                 break
             else:
                 return True
                 break
-def neuviememaj(L, pos):
+def septiememin(L,pos,CalcVTheorique):
     TailleListe = len(L)
-    positionquinte = posquintejuste(L)
-    valeurneuvieme = (L[positionquinte] * (3/2))/2
+    if CalcVTheorique:
+        Valeurseptieme = L[0] * (3/2) * (3/2)
+    else:
+        Valeurseptieme = L[quintejuste(L,True)]*(3/2)
+    for loop in range(TailleListe):
+        quotien = L[loop]/Valeurseptieme
+        if 0.9 < quotien < 1:
+            if pos ==1:
+                return loop
+                break
+            else:
+                return True
+                break
+def neuviememaj(L, pos, CalcVThéorique):
+    TailleListe = len(L)
+    if CalcVThéorique:
+        valeurneuvieme = (L[0] * (3/2)*(4/3))/2
+    else :
+        positionquinte = quintejuste(L,True)
+        valeurneuvieme = L[positionquinte] * (3/2))/2
     for loop in range(TailleListe):
         quotien = L[loop]/valeurneuvieme
         if quotien > 0.9 and quotien <1 :
@@ -367,7 +369,7 @@ def neuviememaj(L, pos):
 def GammeDeffinisseur(Liste):
     if tiercemaj(Liste, False):
         if quartejuste(Liste, False):
-            if septiememaje(Liste, False):
+            if septiememaj(Liste, False, False):
                 return "Ionien"
             else:
                 return "Mixolydien"
@@ -375,15 +377,14 @@ def GammeDeffinisseur(Liste):
             return "Lydien"
     else :
         if quintejuste(Liste, False):
-            if sixtemaj(Liste, False):
-                if neuviememaj(Liste, False):
+            if sixtemaj(Liste, False, False):
+                if ton(Liste, False):
                     return "Aéolien"
                 else:
                     return "Phrygien"
             else:
                 return "Dorien"
         else:
-
             return "Locrien"
 
 #Détections d'accords            
@@ -392,8 +393,7 @@ def AccordDeffinisseurTaille3(Liste):
         if tiercemaj(Liste, False):
             if quintejuste(Liste, False):
                return " "
-            elif
-                
+            elif sixtemaje(Liste, False,True):
                 return "6"
             else:
                 return "Unknown Chord"
@@ -433,14 +433,18 @@ def accordsept(Liste):
     
 #détection d'intervalles            
 def IntervalleDeffinisseur(Liste):
-    if tiercemaj(Liste):
+    if ton(Liste, False):
+        return "Seconde Majeur"
+    if tiercemaj(Liste,False):
         return "Tierce Majeur"   
-    elif quartejuste(Liste):
+    elif quartejuste(Liste,False):
         return "Quarte Juste"
-    elif quintejuste(Liste):
+    elif quintejuste(Liste,False):
         return "Quinte Juste"              
-    elif sixtemaj(Liste):
+    elif sixtemaj(Liste,False,True):
         return "Sixte Majeur"
+    elif septiememaj(Liste, False, True):
+        return "septième Majeur
 
 def TrieurParTaille(Liste):
     Taille = len(Liste)
@@ -465,4 +469,3 @@ def Streamcreation(ListeNote,ListeOctaveNote):
         Note1.octave = ListeOctaveNote[loop]
         stream1.append(Note1)
     return stream1
- 
