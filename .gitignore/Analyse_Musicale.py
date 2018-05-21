@@ -232,10 +232,10 @@ TailleListePrincipale = len(L)
 def IntervalleBasique(L,Intervalle, PositionListe):
     TailleListe = len(L)
     for loop in range(TailleListe):
-        quotien = L[loop]/L[0]
-        if 2.2 < quotien < 1.8 and Intervalle == "Octave":
+        quotient = L[loop]/L[0]
+        if 2.2 < quotient < 1.8 and Intervalle == "Octave":
             return True
-        if 1.49 < quotien < 1.51 and Intervalle == "Quinte":
+        if 1.49 < quotient < 1.51 and Intervalle == "Quinte":
             if PositionListe:
                 return loop
             else :
@@ -247,10 +247,10 @@ def IntervalleBasique(L,Intervalle, PositionListe):
             else :
                 return True
             break
-        elif 1.18 < quotient <1.23 and Intervalle == "Tierce_maj":
+        elif 1.18 < quotient <1.23 and Intervalle == "TierceMin":
             return True
             break
-        elif 1.26 < quotient <1.24 and Intervalle == "Tierce_min":
+        elif 1.24 <quotient <1.26 and Intervalle == "TierceMaj":
             return True
             break
         elif 1.16 < quotient < 1.10 and Intervalle == "Seconde":
@@ -275,27 +275,26 @@ def IntervalleComplexe(L, Intervalle, CalcVTheorique):
            ValeurIntervalle = L[IntervalleBasique(L,"Quinte", True)]*(5/4)
         elif Intervalle == "SeptiemeMin":
             ValeurIntervalle = L[IntervalleBasique(L, "Quinte",True)]*(3/2)
-        if Interalle == "Neuvieme":
-            ValeurIntervalle = L[IntervalleBasique[L,"Quinte", True] * (3/2)/2
+        if Intervalle == "Neuvieme":
+            ValeurIntervalle = L[IntervalleBasique(L,"Quinte", True)] * (3/2)/2
     for loop in range(TailleListe):
-        quotien = L[loop]/ValeurIntervalle
-        if 0.9 < quotien <= 1:
+        quotient = L[loop]/ValeurIntervalle
+        if 0.9 < quotient <= 1.01:
                 return True
                 break
 
-    print("yes")
 def GammeDeffinisseur(Liste):
     try:
         if IntervalleBasique(Liste, "TierceMaj",False):
             if IntervalleBasique(Liste,"Quarte", False) :
-                if IntervalleComplexe(Liste, "SeptiemeMaj", True):
+                if IntervalleComplexe(Liste, "SeptiemeMaj", False):
                     return "Ionien"
                 else:
                     return "Mixolydien"
             else :
                 return "Lydien"
         else :
-            if IntervalleBasique(Liste, False):
+            if IntervalleBasique(Liste, "Quinte", False):
                 if IntervalleComplexe(Liste,"Sixte", True):
                     if Intervallecomplexe(Liste,"Neuvieme", True):
                         return "Aéolien"
@@ -311,7 +310,7 @@ def GammeDeffinisseur(Liste):
 #Détections d'accords            
 def AccordDeffinisseurTaille3(Liste):
     try :
-        if IntervalleBasique(Liste, False):
+        if IntervalleBasique(Liste, "TierceMaj", False):
             if IntervalleBasique(Liste,"Quinte", False):
                 return ""
             elif IntervalleComplexe(Liste, "Sixte",True):
@@ -319,7 +318,7 @@ def AccordDeffinisseurTaille3(Liste):
         elif IntervalleBasique(Liste,"TierceMin", False):
             if IntervalleBasique(Liste,"Quinte", False):
                 return "m"
-            elif
+            elif IntervalleComplexe(Liste,"Sixte", True):
                 return "m6"
         elif IntervalleBasique(Liste,"Quarte", False):
             if IntervalleBasique(Liste,"Quinte", False):
@@ -334,16 +333,16 @@ def AccordDeffinisseurTaille3(Liste):
         return "Unknown Chord"
 def AccordDeffinisseurTaille4(Liste):
     try:
-        if IntervalleComplexe(Liste,"SeptiemeMin", False):
+        if IntervalleComplexe(Liste,"SeptiemeMin", True):
             if AccordDeffinisseurTaille3(Liste, False) == "6" or "m6" or "sus4" or "sus2":
                 return AccordDeffinisseurTaille3(Liste),"/7"
             else:
-                return AccordDeffiniesseurTaille3(Liste),"7"
-        if IntervalleComplexe(Liste, ):
+                return AccordDeffinisseurTaille3(Liste),"7"
+        if IntervalleComplexe(Liste,"SeptiemeMaj",True):
             if AccordDeffinisseurTaille3(Liste) == "6" or "m6" or "sus4" or "sus2":
-                return AccordDeffiniesseurTaille3(Liste), "/∆"
+                return AccordDeffinisseurTaille3(Liste), "/∆"
             else :
-                return AccordDeffiniesseurTaille3(Liste), "∆"
+                return AccordDeffinisseurTaille3(Liste), "∆"
     except:
         return AccordDeffinisseurTaille3(Liste)
     
@@ -359,16 +358,18 @@ def IntervalleDeffinisseur(Liste):
     except:
         return "Erreur"
 
-def Sortie(Liste):
-    Taille = len(Liste)
+def Sorti(ListeFreq,ListeNote):
+    Taille = len(ListeFreq)
     if Taille == 1:
-        return Liste[0]
+        return ListeNote[0]
     elif Taille == 2:
-        return Liste[0], IntervalleDeffinisseur(Liste)
-    elif Taille == 3
-        return Liste[0], AccordDeffinisseurTaille4(Liste)
-    elif Taille < 5:
-        return Liste[0], GammeDeffinisseur(Liste)
+        return ListeNote[0], IntervalleDeffinisseur(ListeFreq)
+    elif Taille == 3 or 4:
+        return ListeNote[0], AccordDeffinisseurTaille4(ListeFreq)
+    elif Taille > 5:
+        return ListeNote[0], GammeDeffinisseur(ListeFreq)
+
+
 """       
 affichage gamme
 besoin des liste ListeNote et ListeOctaveNote
