@@ -346,19 +346,15 @@ def accordsept(Liste):
             return "∆"
     
 #détection d'intervalles            
+#détection d'intervalles            
 def IntervalleDeffinisseur(Liste):
-    if ton(Liste, False):
-        return "Seconde Majeur"
-    if tiercemaj(Liste,False):
-        return "Tierce Majeur"   
-    elif quartejuste(Liste,False):
-        return "Quarte Juste"
-    elif quintejuste(Liste,False):
-        return "Quinte Juste"              
-    elif sixtemaj(Liste,False,True):
-        return "Sixte Majeur"
-    elif septiememaj(Liste, False, True):
-        return "septième Majeur
+    try:
+        Intervalle = ["Seconde","TierceMaj","TierceMin","Quarte","Quinte","Sixt","SeptiemeMin","septiemeMaj"]
+        n = 0
+        while n <= len(Intervalle):
+            if IntervalleBasique(Liste, Intervalle[n], False) or IntervalleComplexe(Liste, Intervalle[n], False):
+                return Intervalle[n]
+            n = n + 1
 
 def TrieurParTaille(Liste):
     Taille = len(Liste)
