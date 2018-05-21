@@ -64,11 +64,88 @@ def Ecriture_Son(nomFichier, listeEch) :
     f.setparams(parametres)
     f.writeframes(data)
     f.close()
+    
+    
+def octave(freq):
+    n = 0
+    # pour reconnaitre les notes, on les transpose à l'octave 3. Cela permet une meilleur optimisation
+    while freq < 255 or freq> 500 :
+        if freq < 255:
+            freq = freq * 2
+            n = n - 1
+        elif freq > 500:
+            freq = freq/2
+            n = n + 1
+    return freq, n
+Diese = 1        
+def notefreqjuste (frequence, Diese): #Diese = 1 ou 0 selon affichage b ou #
+    a, n = octave(frequence)
+    #n = octave(frequence,True) + 3
+    if  263 < a < 259:
+         return "C"
+
+    elif 274 < a 279:
+         if Diese:
+             return "C#"
+         else:
+             return "Db"
+   
+            
+    elif 290 < a < 295:
+         return "D"
+
+            
+    elif 309 < a < 313:
+         if Diese:
+             return "D#"
+         else:
+             return "Eb"
+
+            
+    elif 326 < a 323:
+         return "E"
+
+            
+    elif 346 < a < 351:
+         return "F"
+
+    elif 366 < a 371:
+        if SortieLettre:
+            if Diese:
+                return "F#"
+            else :
+                return "Gb"
+
+    elif 389 < a < 395:
+        if SortiLettre:
+            return "G"
+
+    elif 412 < a < 418:
+        if SortieLettre:
+            if Diese:
+                return "G#"
+            else:
+                return "Ab"
+
+    elif 437 < a < 443:
+        if SortieLettre:
+           return "A"
+
+    elif  463 < a < 469:
+        if SortieLettre:
+            if Diese:
+                return "A#"
+            else:
+                return "Bb"
+
+    elif 490 < a < 496:
+        if SortieLettre:
+            return "B"
 
 
 oc = { "Do": 131, "Do#": 139, "Re": 147, "Re#": 156, "Mi": 165, "Fa": 175, "Fa#": 185, "Sol": 196, "Sol#": 208, "La": 220, "Sib" :233, "Si" : 247 }
 
-oc2 = { "Do": 262, "Do#": 277, "Re": 294, "Re#": 311, "Mi": 330, "Fa": 349, "Fa#": 370, "Sol": 392, "Sol#": 415, "La": 440, "Sib" :466, "Si" : 494, "Do2" : 523 }
+oc2 = { "C":  261.63, "C#": 277.18, "D": 293.66, "D#": 311.13, "E":329.63, "F":349.23, "F#": 369.99, "G": 392.00, "G#": 415.30, "A": 440.00, "Bb" :466.16, "B" :  493.88, "C2" : 523 }
 
 DoM = [oc["Do"],oc["Re"],oc["Mi"],oc["Fa"],oc["Sol"],oc["La"],oc["Si"],oc2["Do"] ] 
 
@@ -83,6 +160,7 @@ Do_M = [oc["Do#"],oc["Re#"],oc["Fa"],oc["Fa#"],oc["Sol#"],oc["Sib"],oc["Do"],oc2
 
 #Gammes avec bémol
 # A faire
+
 
 
 def ecrire_gamme(nom_fichier,gamme,amplitude,tps_note):
@@ -102,10 +180,10 @@ def func(x,a,b,c):
 plt.ion()   # utilise pyplot en interactif
  
 # Ouverture du fichier wav a decrypter
-f,x, nbCanaux, nbFrames, fech = lecture_Son("gamme.wav")
+x, nbCanaux, nbFrames, fech = lecture_Son("gamme.wav")
 
 #Decouper le fichier pour analyser chaque note après l'autre 
-frequences, freq_gauss, FreqNoteJuste, ListeNote = [], [], []
+frequences, freq_gauss, FreqNoteJuste, = [], [], []
 larg_frame = 44100
 for posi in range(0,nbFrames,larg_frame):
  
@@ -129,10 +207,12 @@ for posi in range(0,nbFrames,larg_frame):
     popt, pcov = curve_fit( func, freqs[ind], sig[ind]/maxi, p0=[f0,1,1] )
     a, b, c = popt
     freq_gauss.append(a)
-    FreqNoteJuste.append(notefreqJuste(a, False, False))
+    note = notefreqjuste (frequence, Diese)
+    print(note)
+    FreqNoteJuste.append(oc2[note])
     
-
 f.close()
+print(freqNoteJuste)
   
 for res in (frequences,freq_gauss):
     print(np.round(res, 0))
@@ -151,98 +231,7 @@ TailleListePrincipale = len(L)
 
 
 #création des listes de notes 
-def Octave(freq, sortin):
-    n = 0
-    # pour reconnaitre les notes, on les transpose à l'octave 3. Cela permet une meilleur optimisation
-    while freq < 255 or a > 500 :
-        if freq < 255:
-            freq = freq * 2
-            n = n - 1
-        elif freq > 500:
-            freq = freq/2
-            n = n + n
-    if sortin:
-        return n
-    else:
-        return freq
-def notefreqjuste (frequence, SortieLettre, Diese):
-    a = octave(frequence,False)
-    n = octave(frequence,True) + 3
-    if a < 263 and a > 259:
-        if SortieLettre:
-            return "C"
-        else: 
-            return 261.63 * 2 **(n-3)
-    elif a < 279 and a > 275 :
-        if sortieLettre:
-            if Diese:
-                return "C#"
-            else:
-                return "Db"
-        else:
-            return 277.18 * 2 ** (n-3)
-    elif a < 295 and a > 290:
-        if SortieLettre:
-            return "D"
-        else :
-            return 293.66 * 2 **(n-3)
-    elif a < 313 and a > 309:
-        if SortieLettre:
-            if Diese:
-                return "D#"
-            else:
-                return "Eb"
-        else:
-            return 311.13 * 2 ** (n-3)
-    elif a < 332 and a > 326:
-        if SortieLettre:
-            return "E"
-        else :
-            return 329.63 * 2 **(n-3)
-    elif a < 351 and a > 346:
-        if SortieLettre:
-            return "F"
-        else:
-            return 349.23 * 2 ** (n-3)
-    elif a < 371 and a > 366:
-        if SortieLettre:
-            if Diese:
-                return "F#"
-            else :
-                return "Gb"
-        else:
-            return 369.99 * 2 ** (n-3)
-    elif a < 395 and a > 389:
-        if SortiLettre:
-            return "G"
-        else:
-            return 392.00 * 2 ** (n-3)
-    elif a < 418 and a > 412:
-        if SortieLettre:
-            if Diese:
-                return "G#"
-            else:
-                return "Ab"
-        else
-            return  415.30 * 2 ** (n-3)
-    elif a < 443 and a > 437:
-        if SortieLettre:
-           return "A"
-        else:
-            return 440.00 * 2 ** (n-3)
-    elif a < 469 and a > 463:
-        if SortieLettre:
-            if Diese:
-                return "A#"
-            else:
-                return "Bb"
-        else :
-            return 466.16 * 2 **(n-3)
-    elif a < 496 and 490:
-        if SortieLettre:
-            return "B"
-        else:
-            return 493.88 * 2 ** (n-3)
+
 
 #fonction pour reconnaitre un intervalle, ou pour donner la position dans la liste
 def ton(L, pos):
