@@ -210,6 +210,7 @@ for posi in range(0,nbFrames,larg_frame):
 f.close()
 for i in range(len(FreqNoteJuste)):
     print(FreqNoteJuste[i])
+print(sortie(FreqNoteJuste))
 
 #Analyse des Fréquences fournit soit par le générateur ou l'analyseur 
 """    
@@ -358,7 +359,7 @@ def IntervalleDeffinisseur(Liste):
     except:
         return "Erreur"
 
-def Sorti(Liste):
+def Sortie(Liste):
     Taille = len(Liste)
     if Taille == 1:
         return Liste[0]
