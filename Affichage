@@ -128,3 +128,62 @@ p.add(Label(p, text="ALLAHU AKBAR", bg="blue"))
 
 
 main.mainloop()
+
+"""
+import matplotlib.pyplot as plt
+import numpy as np
+import wave, struct
+import sys
+
+f = wave.open('lol2.wav','r')
+
+plt.ion()
+larg_frame = 44100
+
+    # Sequence contenant une note
+for i in range(0,larg_frame*8,larg_frame):
+    f.setpos(i)
+    donnee = f.readframes(larg_frame)
+    data = struct.unpack('%sh' % (larg_frame ), donnee)
+    
+    
+   
+    signal = []
+    n = 0
+    for i in range(0,len(data),175):    # toute cette partie visait à réduire le nombre 
+        signal.append(data[i])          # d'échantillon pour obtenir un signal (175 est une
+        n += 1                          # est un diviseur de 44100, pour les trouver tu peux partir
+    fs = 44100//175                     # de la multiplication de 2**2 * 3**2 * 5**2 * 7**2)
+            
+    n = len(signal)
+    k = np.arange(n)
+    T = n //252
+    freq = k//T
+    freq = freq[range(n//2)]
+    
+    Y = np.fft.fft(signal)/n
+    Y = Y[range(n//2)]
+    
+    
+            
+            
+    fig, (ax1, ax2) = plt.subplots(2, figsize=(15, 7))       
+            
+    Time=np.linspace(0, len(signal)/fs, num=len(signal))
+    
+    plt.figure(1)
+    plt.title('Signal Wave...')
+    plt.ylim(-5500,5500)
+    ax1.plot(Time,signal)
+    ax2.plot(freq,abs(Y), 'r')
+    plt.draw()
+    plt.pause(3)
+    plt.close()
+"""
+
+
+
+
+
+
+
