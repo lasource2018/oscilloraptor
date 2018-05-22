@@ -4,6 +4,7 @@ from tkinter import messagebox
 import tkinter.font as tkFont
 
 #Importation du fichier et vérification du format (.wav only)
+globalpathfilename = str()
 def selec_fichier():
     pathfilename =  filedialog.askopenfilename(initialdir = "/",title = "Sélection du fichier audio",filetypes = (("audio files","*.*"),("all files","*.*")))
     longueur = len(pathfilename)
@@ -17,6 +18,7 @@ def selec_fichier():
     else:
         Filenamebox.delete(0.0, END)
         Filenamebox.insert(END, pathfilename)
+        globalpathfilename = pathfilename
     
 
 def switchMode():
