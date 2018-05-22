@@ -118,6 +118,10 @@ NameFileEntry.grid(row=4, column=1, sticky=NW, padx=8, pady=12)
 SaisieNom = Entry(Generateur, bg="white", width = 22)
 SaisieNom.grid(row=4, column=1, padx=20, pady=12, sticky=E)
 
+#Bouton générer 
+GenLaunch = Button(Generateur, text="Lancer la génération", command=ecrire_gamme(nom_fichier,gamme,amplitude,tps_note,fech))
+GenLaunch.grid(row=5, column=1, padx=20, pady=12, sticky=W)
+
 '_____________________________________________________________________________________________________________________'
 
 #Fenêtre de gauche (les graphiques)
