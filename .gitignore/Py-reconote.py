@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 #Définition des fonctions
-Diese = 1        
+    
 #Importation du fichier et vérification du format (.wav only)
 def selec_fichier():
     pathfilename =  filedialog.askopenfilename(initialdir = "/",title = "Sélection du fichier audio",filetypes = (("audio files","*.*"),("all files","*.*")))
