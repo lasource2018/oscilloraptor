@@ -12,8 +12,7 @@ from scipy.optimize import curve_fit
         
 #Importation du fichier et vérification du format (.wav only)
 def selec_fichier():
-    pathfilename =  filedialog.askopenfilename(initialdir = "/",
-    title = "Sélection du fichier audio",filetypes = (("audio files","*.*"),("all files","*.*")))
+    pathfilename =  filedialog.askopenfilename(initialdir = "/",title = "Sélection du fichier audio",filetypes = (("audio files","*.*"),("all files","*.*")))
     longueur = len(pathfilename)
     ext = []
     for boucle in range(1,5):
