@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 #Définition des fonctions
-        
+Diese = 1        
 #Importation du fichier et vérification du format (.wav only)
 def selec_fichier():
     pathfilename =  filedialog.askopenfilename(initialdir = "/",title = "Sélection du fichier audio",filetypes = (("audio files","*.*"),("all files","*.*")))
@@ -65,7 +65,8 @@ def Ecriture_Son(nomFichier, listeEch) :
 # 2 dictionnaire classant les notes de D0 131 à DO 523 soit 2 octaves
 oc = { "C": 131, "C#": 139, "Db" : 139,"D": 147, "D#": 156,"Eb":156, "E": 165, "F": 175, "F#": 185,"Gb":185, "G": 196, "G#": 208, "Ab":208,"A": 220, "A#" :233,"Bb" : 233, "B" : 247 }
 
-oc2 = { "C":  262, "C#": 277.18, "Db": 277.18,"D": 293.66, "D#": 311.13, "Eb": 311.13,"E":329.63, "F":349.23, "F#": 369.99, "Gb": 369.99, "G": 392.00, "G#": 415.30, "Ab": 415.30, "A": 440.00, "A#" :466.16, "Bb" :466.16, "B" :  493.88, "C2" : 523 }
+oc2 = { "C":  262, "C#": 277, "Db": 277,"D": 294, "D#": 311, "Eb": 311,"E":330, "F":349, "F#": 370, "Gb": 370, "G": 392, "G#": 415, "Ab": 415, "A": 440, "A#" :466, "Bb" :466, "B" :  494, "C2" : 523 }
+
 
 # ensemble des gammes majeures et mineures
 
@@ -108,11 +109,12 @@ Bbm = [oc["Bb"],oc2["C"],oc2["Db"],oc2["Eb"],oc2["F"],oc2["Gb"],oc2["A"],oc2["Bb
 Ebm = [oc["Eb"],oc["F"],oc["Gb"],oc["Ab"],oc["Bb"],oc2["B"],oc2["D"],oc2["Eb"]] 
 Abm = [oc["Ab"],oc["Bb"],oc2["B"],oc2["Db"],oc2["Eb"],oc2["E"],oc2["G"],oc2["Ab"]] 
 
+identification = { "CM": CM, "GM":GM, "DM":DM, "AM":AM, "EM":EM, "FM":FM, "BbM":BbM, "EbM":EbM, "AbM":AbM, "Am":Am, "Em":Em, "Bm":Bm,"Dm":Dm,"Gm":Gm}
 
 # génère une gamme composé d'une suite de sinus, le fichier est ensuite enregistré dans le dossier où est enregistré le code python
 def ecrire_gamme(nom_fichier,gamme,amplitude,tps_note):
     E = []
-    n = gamme
+    n = identification[gamme]
     for i in range(len(n)):
         O = [int(round(amplitude*math.sin(2*math.pi*n[i]*t*(1/44100)))) for t in  range(44100*tps_note)]
         E.extend(O)
@@ -240,14 +242,14 @@ def GammeDeffinisseur(Liste):
             else:
                 return "Locrien"
     except:
-        return "Erreur"
+        return "."
 
 #Détections d'accords            
 def AccordDeffinisseurTaille3(Liste):
     try :
         if IntervalleBasique(Liste, "TierceMaj", False):
             if IntervalleBasique(Liste,"Quinte", False):
-                return ""
+                return "."
             elif IntervalleComplexe(Liste, "Sixte",True):
                  return "6"
         elif IntervalleBasique(Liste,"TierceMin", False):
@@ -265,7 +267,7 @@ def AccordDeffinisseurTaille3(Liste):
             if IntervalleBasique(Liste,"Quinte", False):
                 return "PowerChord HEEEELL YEAH"
     except:
-        return "Unknown Chord"
+        return "."
 def AccordDeffinisseurTaille4(Liste):
     try:
         if IntervalleComplexe(Liste,"SeptiemeMin", True):
@@ -291,7 +293,7 @@ def IntervalleDeffinisseur(Liste):
                 return Intervalle[n]
             n = n + 1
     except:
-        return "Erreur"
+        return "."
 
 #fonction général qui réunie toute les fonctions qui viennent d'être défini
 def sortie(ListeFreq,ListeNote):
@@ -389,9 +391,9 @@ def analyser_son(nomFichier):
     # Ouverture du fichier wav a decrypter
     f, x, nbCanaux, nbFrames, fech = lecture_Son(nomFichier)
     
-    #Découper le fichier pour analyser chaque note après l'autre 
-    frequences, freq_gauss, FreqNoteJuste, ListeNote,  = [], [], [], [], 
-    larg_frame = 44100
+    #Découper le fichier pour analyser une note après l'autre 
+    frequences, FreqNoteJuste, ListeNote,  = [], [], [], 
+    larg_frame = fech
     for posi in range(0,nbFrames,larg_frame):
     
         # Sequence contenant une note
@@ -400,7 +402,7 @@ def analyser_son(nomFichier):
         data = struct.unpack('%sh' % (larg_frame*nbCanaux ), donnee)
     
         # Transformee de Fourier
-        fourier  = np.fft.fft(data)                                  
+        fourier  = np.fft.fft(data)                                
         valeur_réelle   = np.real(fourier * fourier.conjugate())
         freqs = np.fft.fftfreq(len(fourier)) * nbFrames
     
@@ -413,24 +415,22 @@ def analyser_son(nomFichier):
         ind = np.where( np.abs(freqs - f0) < 20 )
         popt, pcov = curve_fit( func, freqs[ind], valeur_réelle[ind]/maxi, p0=[f0,1,1] )
         a, b, c = popt
-        freq_gauss.append(a)
-        
-        note, n = notefreqjuste (a, Diese)
+        note, n = notefreqjuste(a,Diese)
         ListeNote += note
         
         FreqNoteJuste.append(oc2[note]*(n-1))
     
         #Affichage
         signal = []
-        for i in range(0,len(data),210):     
+        for i in range(0,len(data),175):     
             signal.append(data[i])                                   
-        fs = 44100//210
+        fs = 44100//175
     
         Time=np.linspace(0, len(signal)/fs, num=len(signal))
     
         plt.subplot(211)
         plt.plot(Time,signal)
-        plt.title("ondes sonores et sa fréquence fondamentale")
+        plt.title("onde sonore et sa fréquence fondamentale")
         plt.xlim(0,1)
         
         plt.subplot(212)
@@ -438,10 +438,10 @@ def analyser_son(nomFichier):
         plt.plot( fnew, maxi * func(fnew,a,b,c), 'r')
         
         plt.draw() 
-        plt.pause(3)
+        plt.pause(0.5)
         plt.clf()
         
-    
+    plt.close
     f.close()
     intervale = sortie(FreqNoteJuste, ListeNote)
     return ListeNote, intervale
@@ -453,6 +453,16 @@ def Launch_Analyser():
     AllNotes = " ".join(a)
     return AllNotes
 
+def Launch_Analyser2():
+    nomFichier = selec_fichier()
+    a, b = analyser_son(nomFichier)
+    tableau = []
+    print(b)
+    tableau.append(b[0])
+    tableau.append(b[1][0])
+    tableau.append(b[1][1])
+    AllIntervalles = " ".join(tableau)
+    return AllIntervalles
 
 #Début de l'interface graphique
 fenetre = Tk()
@@ -500,8 +510,7 @@ Be.grid(row=6, column=1, sticky=E, padx=4, pady=11)
 #Affichage des intervalles et des notes
 InterNote = LabelFrame(Analyseur, bg="white", text="Intervalle", bd=0)
 InterNote.grid(row=7, column=1, sticky=W, padx=4, pady=1)
-PrintInter = "Gm6/∆" #relier avec la fonction "sortie"
-Label(InterNote, text=PrintInter).grid(row=1, column=1, sticky=W, padx=4, pady=3)
+Label(InterNote, text=Launch_Analyser2()).grid(row=1, column=1, sticky=W, padx=4, pady=3)
 NomNotes = LabelFrame(Analyseur, bg="white", text="Notes détectées", bd=0)
 Label(InterNote, text=Launch_Analyser()).grid(row=2, column=1, sticky=W, padx=4, pady=7)
 
@@ -540,6 +549,7 @@ GenLaunch.grid(row=5, column=1, padx=20, pady=12, sticky=W)
 
 
 fenetre.mainloop()
+
 
 
 
