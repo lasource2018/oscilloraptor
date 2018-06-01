@@ -457,7 +457,6 @@ def Launch_Analyser2():
     nomFichier = selec_fichier()
     a, b = analyser_son(nomFichier)
     tableau = []
-    print(b)
     tableau.append(b[0])
     tableau.append(b[1][0])
     tableau.append(b[1][1])
